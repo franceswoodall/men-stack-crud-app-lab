@@ -3,6 +3,8 @@ const express = require('express');
 const dotenv = require('dotenv'); 
 dotenv.config(); 
 const mongoose = require('mongoose'); 
+const methodOverride = require('method-override'); 
+const morgan = require('morgan'); 
 
 const app = express();
 
@@ -14,6 +16,8 @@ mongoose.connection.on('connected', () => {
 const Dog = require('./models/dog.js'); 
 
 app.use(express.urlencoded({ extended: false })); 
+app.use(methodOverride('_method')); 
+app.use(morgan('dev')); 
 
 // routes
 app.get('/', async (req, res) => {
@@ -29,6 +33,11 @@ app.get('/dogs/new', (req, res) => {
     res.render('dogs/new.ejs');
 }); 
 
+app.get('/dogs/:dogId', async (req, res) => {
+    const foundDog = await Dog.findById(req.params.dogId); 
+    res.render('dogs/show.ejs', {dog:foundDog}); 
+}); 
+
 app.post('/dogs', async (req, res) => {
     if (req.body.doesTricks === 'on') {
         req.body.doesTricks = true; 
@@ -37,7 +46,19 @@ app.post('/dogs', async (req, res) => {
     }
     await Dog.create(req.body); 
     res.redirect('/dogs'); 
-})
+}); 
+
+app.delete('/dogs/:dogId', async (req, res) => {
+    await Dog.findByIdAndDelete(req.params.dogId); 
+    res.redirect('/dogs'); 
+}); 
+
+app.get('/dogs/:dogId/edit', async (req, res) => {
+    const foundDog = await Dog.findById(req.params.dogId); 
+    res.render('dogs/edit.ejs', {
+        dog: foundDog, 
+    });  
+}); 
 
 app.listen(3000, () => {
     console.log('listening on port 3000'); 
