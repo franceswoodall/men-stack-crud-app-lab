@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dogs Index</title>
+</head>
+<body>
+    <h1>All Dogs</h1>
+    <a href="/dogs/new">Add new dog</a>
+    <ul>
+        <% dogs.forEach(dog => { %>
+            <li><%= dog.name %></li>
+        <% }); %>
+    </ul>
+</body>
+</html>
