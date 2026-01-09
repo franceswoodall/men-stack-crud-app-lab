@@ -60,6 +60,16 @@ app.get('/dogs/:dogId/edit', async (req, res) => {
     });  
 }); 
 
+app.put('/dogs/:dogId', async (req, res) => {
+    if (req.body.doesTricks === 'on') {
+        req.body.doesTricks = true;
+    } else {
+        req.body.doesTricks = false; 
+    }; 
+    await Dog.findByIdAndUpdate(req.params.dogId, req.body); 
+    res.redirect(`/dogs/${req.params.dogId}`); 
+})
+
 app.listen(3000, () => {
     console.log('listening on port 3000'); 
 });
