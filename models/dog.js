@@ -1,3 +1,4 @@
+const { application } = require('express');
 const mongoose = require('mongoose'); 
 
 const dogSchema = new mongoose.Schema({
@@ -9,3 +10,4 @@ const dogSchema = new mongoose.Schema({
 const Dog = mongoose.model("Dog", dogSchema); 
 
 module.exports = Dog; 
+
